@@ -8,4 +8,4 @@ In time, as the engine becomes more complex, other features of Julia will be use
 
 As this is a software renderer, it will never be fast enough for real time graphics. The project could eventually extend to offloading compute to an FPGA, but that is very far off. 
 
-![Example render](https://github.com/EdwardStables/julia_ray_tracing/demo/animate.gif)
+![Example render](https://github.com/EdwardStables/julia_ray_tracing/blob/master/demo/animate.gif)
