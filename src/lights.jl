@@ -1,0 +1,83 @@
+mutable struct color <: tuple
+    r::Float64
+    g::Float64
+    b::Float64
+
+    function color(r, g, b)
+        c = i -> convert(Float64, i)
+        color(c(r), c(g), c(b))
+    end
+
+    color(r::Float64, g::Float64, b::Float64) = new(r, g, b)
+end
+
+function ==(c1::color, c2::color) 
+    return c1.r ≈ c2.r && c1.g ≈ c2.g && c1.b ≈ c2.b
+end
+
+#= Arithmetic =#
+
+function +(c1::color, c2::color)
+    return color(c1.r + c2.r,  c1.g + c2.g,  c1.b + c2.b)
+end
+
+function -(c1::color, c2::color)
+    return color(c1.r - c2.r,  c1.g - c2.g,  c1.b - c2.b)
+end
+
+*(i::Number, c::color) = c * i
+function *(c::color, i::Number)
+    return color(c.r * i, c.g * i, c.b * i)
+end
+
+*(c1::color, c2::color) = hadamard_product(c1, c2)
+
+function hadamard_product(c1::color, c2::color)
+    return color(c1.r * c2.r, c1.g * c2.g, c1.b * c2.b)
+end
+
+abstract type light end
+
+struct point_light <: light
+    position::point
+    intensity::color
+end
+
+function lighting(m::T, l::point_light, 
+                  pos::point, eyev::vector, norm::vector
+                 )::color where T <: abstract_material
+    #the color we will see
+    effective_color = m.color * l.intensity
+    #the direction to the light source
+    lightv = normalize(l.position - pos)
+    #the ambient aspect
+    ambient = effective_color * m.ambient
+
+    #the cosine of the angle between the light vector and the normal vector
+    #-ve means light is on the other side of the surface
+    light_dot_normal = dot(lightv, norm)
+    black = color(0,0,0)
+
+    if light_dot_normal < 0
+        diffuse = black
+        specular = black
+    else
+        #diffuse contribution
+        diffuse = effective_color * m.diffuse * light_dot_normal
+
+        #the cosine of the angle between the reflection vector and the eye
+        #negative means the light reflects away from the eye
+        reflect_dot_eye = dot(reflect(-lightv, norm), eyev)
+        
+        if reflect_dot_eye <= 0
+            specular = black
+        else
+            factor = reflect_dot_eye^m.shininess
+            specular = l.intensity * m.specular * factor
+        end
+    end
+
+    return ambient + diffuse + specular
+end
+
+
