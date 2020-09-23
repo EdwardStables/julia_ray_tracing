@@ -10,5 +10,6 @@ include("./transformations.jl")
 include("./ray.jl")
 include("./reflections.jl")
 include("./canvas.jl")
+include("./world.jl")
 
 end # module

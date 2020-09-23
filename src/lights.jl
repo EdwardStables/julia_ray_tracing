@@ -43,6 +43,10 @@ struct point_light <: light
     intensity::color
 end
 
+function ==(m::light, n::light)
+    return m.position == n.position && m.intensity == n.intensity
+end
+
 function lighting(m::T, l::point_light, 
                   pos::point, eyev::vector, norm::vector
                  )::color where T <: abstract_material
