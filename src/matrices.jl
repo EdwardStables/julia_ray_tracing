@@ -1,9 +1,15 @@
-import Base: *, adjoint, Array
+import LinearAlgebra
+import Base: *, adjoint, Array, ==, inv
 
 struct identity end
 const I = identity()
 adjoint(::identity) = I
 Array(::identity) = I
+
+==(::identity, A::Matrix) = A == LinearAlgebra.I
+==(A::Matrix, ::identity) = A == LinearAlgebra.I
+
+inv(::identity) = I 
 
 
 function *(A::Matrix, b::tuple; force_w::Union{Nothing,Int64}=nothing)

@@ -58,4 +58,31 @@
         result = rt.lighting(m, light, p, eyev, normalv)
         @test result == rt.color(0.1,0.1,0.1)
     end
+
+    @testset "shadows" begin
+        #lighting with the surface in shadow
+        eyev = rt.vector(0,0,-1)
+        normalv = rt.vector(0,0,-1)
+        light = rt.point_light(rt.point(0,0,-10),rt.color(1,1,1))
+        in_shadow = true
+        result = rt.lighting(rt.material(), light, rt.point(0,0,0), eyev, normalv, in_shadow)
+        @test result == rt.color(0.1, 0.1, 0.1)
+
+        #there is no shadow when nothing is colinear with light/sphere
+        w = rt.default_world()
+        p = rt.point(0,10,0)
+        @test rt.is_shadowed(w, p) == false 
+        #shadowed when object between light and point
+        w = rt.default_world()
+        p = rt.point(10, -10, 10)
+        @test rt.is_shadowed(w, p) == true
+        #no shadow when light between object and point
+        w = rt.default_world()
+        p = rt.point(-20, 20, -20)
+        @test rt.is_shadowed(w, p) == false
+        #no shadow when point between object and light
+        w = rt.default_world()
+        p = rt.point(-5, 5, -5)
+        @test rt.is_shadowed(w, p) == false
+    end
 end

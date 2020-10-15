@@ -48,14 +48,23 @@ function ==(m::light, n::light)
 end
 
 function lighting(m::T, l::point_light, 
-                  pos::point, eyev::vector, norm::vector
+                  pos::point, eyev::vector, norm::vector,
                  )::color where T <: abstract_material
+    lighting(m,l,pos,eyev,norm,false)
+end
+function lighting(m::T, l::point_light, 
+                  pos::point, eyev::vector, norm::vector,
+                  in_shadow::Bool
+                 )::color where T <: abstract_material
+
     #the color we will see
     effective_color = m.color * l.intensity
-    #the direction to the light source
-    lightv = normalize(l.position - pos)
     #the ambient aspect
     ambient = effective_color * m.ambient
+    in_shadow && return ambient
+
+    #the direction to the light source
+    lightv = normalize(l.position - pos)
 
     #the cosine of the angle between the light vector and the normal vector
     #-ve means light is on the other side of the surface
@@ -84,4 +93,12 @@ function lighting(m::T, l::point_light,
     return ambient + diffuse + specular
 end
 
-
+function is_shadowed(w::abstract_world, p::point)::Bool
+    d = w.light.position - p
+    dir = normalize(d)
+    xs = intersect_world(w, ray(p,dir))
+    h = hit(xs)
+    h == nothing && return false
+    h.t < magnitude(d) && return true
+    return false
+end
