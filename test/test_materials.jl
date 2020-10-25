@@ -6,13 +6,13 @@
     @test m.specular == 0.9
     @test m.shininess == 200.0
 
-    s = rt.sphere(0)
-    m = s.material
+    s = rt.sphere()
+    m = rt.get_material(s)
     @test m == rt.material()
 
-    s = rt.sphere(0)
+    s = rt.sphere()
     m = rt.material()
     m.ambient = 1
-    s.material = m
-    @test s.material == m
+    rt.set_material(s, m)
+    @test rt.get_material(s) == m
 end

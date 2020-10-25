@@ -9,7 +9,7 @@ function default_world()
     w = world()
     w.light = point_light(point(-10, 10, -10), color(1,1,1))
     w.objects = [sphere(), sphere()]
-    w.objects[1].material = material(color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 200.0)
+    set_material(w.objects[1], material(color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 200.0))
    
     set_transform(w.objects[2], scaling(0.5, 0.5, 0.5))
 
@@ -65,7 +65,7 @@ prepare_computations(i::intersection, r::ray)::computation = computation(i, r)
 
 function shade_hit(w::world, c::computation)::color
     shadowed = is_shadowed(w, c.over_point)
-    return lighting(c.object.material,
+    return lighting(get_material(c.object),
                     w.light,
                     c.point,
                     c.eyev,

@@ -1,31 +1,31 @@
 @testset "reflections" begin
     @testset "sphere normal" begin
-        s = rt.sphere(0)
+        s = rt.sphere()
         n = rt.normal_at(s, rt.point(1,0,0))
         @test n == rt.vector(1,0,0)
 
-        s = rt.sphere(0)
+        s = rt.sphere()
         n = rt.normal_at(s, rt.point(0,1,0))
         @test n == rt.vector(0,1,0)
 
-        s = rt.sphere(0)
+        s = rt.sphere()
         n = rt.normal_at(s, rt.point(0,0,1))
         @test n == rt.vector(0,0,1)
 
-        s = rt.sphere(0)
+        s = rt.sphere()
         n = rt.normal_at(s, rt.point(√3/3,√3/3,√3/3))
         @test n == rt.vector(√3/3,√3/3,√3/3)
 
-        s = rt.sphere(0)
+        s = rt.sphere()
         n = rt.normal_at(s, rt.point(√3/3,√3/3,√3/3))
         @test n == rt.normalize(n)
 
-        s = rt.sphere(0)
+        s = rt.test_shape()
         rt.set_transform(s, rt.translation(0,1,0))
         n = rt.normal_at(s, rt.point(0, 1.70711, -0.70711))
         @test n == rt.vector(0, 0.7071067811865475, -0.7071067811865476)
 
-        s = rt.sphere(0)
+        s = rt.test_shape()
         m = rt.scaling(1.0, 0.5, 1.0) * rt.rotation_z(π/5)
         rt.set_transform(s, m)
         n = rt.normal_at(s, rt.point(0, √2/2, -√2/2))

@@ -6,7 +6,7 @@
     #test that default world works
     l = rt.point_light(rt.point(-10, 10, -10), rt.color(1,1,1))
     s1 = rt.sphere()
-    s1.material = rt.material(rt.color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 200.0)
+    rt.set_material(s1, rt.material(rt.color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 200.0))
    
     s2 = rt.sphere()
     rt.set_transform(s2, rt.scaling(0.5, 0.5, 0.5))
@@ -96,12 +96,12 @@
 
     w = rt.default_world()
     outer = w.objects[1]
-    outer.material.ambient = 1
+    rt.modify_material(outer, :ambient, 1.0)
     inner = w.objects[2]
-    inner.material.ambient = 1
+    rt.modify_material(inner, :ambient, 1.0)
     r = rt.ray(rt.point(0,0,0.75), rt.vector(0,0,-1))
     c = rt.color_at(w,r)
-    @test c == inner.material.color
+    @test c == rt.get_material(inner).color
 
     @testset "view transform" begin
         from = rt.point(0,0,0)

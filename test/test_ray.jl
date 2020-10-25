@@ -12,14 +12,14 @@
     @test rt.position(r, 2.5) == rt.point(4.5,3,4)
 
     r = rt.ray(rt.point(0,0,-5), rt.vector(0,0,1))
-    s = rt.sphere(0)
+    s = rt.sphere()
     xs = rt.intersect(s, r)
     @test length(xs) == 2
     @test xs[1].t == 4.0
     @test xs[2].t == 6.0
 
     r = rt.ray(rt.point(0, 1, -5), rt.vector(0,0,1))
-    s = rt.sphere(1)
+    s = rt.sphere()
     xs = rt.intersect(s, r)
     @test length(xs) == 2
     @test xs[1].t == 5.0
@@ -27,31 +27,31 @@
 
 
     r = rt.ray(rt.point(0, 2, -5), rt.vector(0,0,1))
-    s = rt.sphere(2)
+    s = rt.sphere()
     xs = rt.intersect(s,r)
     @test length(xs) == 0
 
     r = rt.ray(rt.point(0,0,0), rt.vector(0,0,1))
-    s = rt.sphere(3)
+    s = rt.sphere()
     xs = rt.intersect(s,r)
     @test length(xs) == 2
     @test xs[1].t == -1.0
     @test xs[2].t == 1.0
 
     r = rt.ray(rt.point(0, 0, 5), rt.vector(0,0,1))
-    s = rt.sphere(4)
+    s = rt.sphere()
     xs = rt.intersect(s, r)
     @test length(xs) == 2
     @test xs[1].t == -6.0
     @test xs[2].t == -4.0
 
 
-    s = rt.sphere(0)
+    s = rt.sphere()
     i = rt.intersection(3.5, s)
     @test i.t == 3.5
     @test i.object == s
 
-    s = rt.sphere(0)
+    s = rt.sphere()
     i1 = rt.intersection(1, s)
     i2 = rt.intersection(2, s)
     xs = rt.intersections(i1, i2)
@@ -60,14 +60,14 @@
     @test xs[2].t == 2
 
     r = rt.ray(rt.point(0,0,-5), rt.vector(0,0,1))
-    s = rt.sphere(0)
+    s = rt.sphere()
     xs = rt.intersect(s, r)
     @test length(xs) == 2
     @test xs[1].object == s
     @test xs[2].object == s
 
     #hit when all intersections have +ve t
-    s = rt.sphere(0)
+    s = rt.sphere()
     i1 = rt.intersection(1, s)
     i2 = rt.intersection(2, s)
     xs = rt.intersections(i1, i2)
@@ -75,7 +75,7 @@
     @test i == i1
     
     #hit when some intersections have +ve t
-    s = rt.sphere(0)
+    s = rt.sphere()
     i1 = rt.intersection(-1, s)
     i2 = rt.intersection(1, s)
     xs = rt.intersections(i1, i2)
@@ -83,7 +83,7 @@
     @test i == i2
     
     #hit when all intersections have -ve t
-    s = rt.sphere(0)
+    s = rt.sphere()
     i1 = rt.intersection(-2, s)
     i2 = rt.intersection(-1, s)
     xs = rt.intersections(i1, i2)
@@ -91,7 +91,7 @@
     @test i == nothing
     
     #hit is the lowest +ve t value
-    s = rt.sphere(0)
+    s = rt.sphere()
     i1 = rt.intersection(5, s)
     i2 = rt.intersection(7, s)
     i3 = rt.intersection(-3, s)
@@ -114,15 +114,15 @@
     @test r2.origin == rt.point(2, 6, 12)
     @test r2.direction == rt.vector(0,3,0)
 
-    s = rt.sphere(0)
-    @test s.transform == rt.I
-    s = rt.sphere(0)
+    s = rt.sphere()
+    @test rt.get_transform(s) == rt.I
+    s = rt.sphere()
     t = rt.translation(2,3,4)
     rt.set_transform(s,t)
-    @test s.transform == t
+    @test rt.get_transform(s) == t
 
     r = rt.ray(rt.point(0,0,-5), rt.vector(0,0,1))
-    s = rt.sphere(0)
+    s = rt.sphere()
     rt.set_transform(s, rt.scaling(2,2,2))
     xs = rt.intersect(s,r)
     @test length(xs) == 2
@@ -130,7 +130,7 @@
     @test xs[2].t == 7
 
     r = rt.ray(rt.point(0,0,-5), rt.vector(0,0,1))
-    s = rt.sphere(0)
+    s = rt.sphere()
     rt.set_transform(s, rt.translation(5,0,0))
     xs = rt.intersect(s,r)
     @test length(xs) == 0
