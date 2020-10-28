@@ -9,6 +9,10 @@ end
 
 tovec(t::tuple) = [t.x, t.y, t.z, t.w]
 
+Base.iterate(t::tuple) = (t.x, 2)
+Base.iterate(t::tuple, s::Int64) = s==4 ? nothing : (s==3 ? (t.z,4) : (t.y,3))
+
+
 mutable struct point <: tuple
     x::Float64
     y::Float64

@@ -1,7 +1,7 @@
 import Base: ==
 
 mutable struct material <: abstract_material
-    color::color
+    color::Union{color,pattern}
     ambient::Float64
     diffuse::Float64
     specular::Float64
@@ -10,6 +10,10 @@ mutable struct material <: abstract_material
     material(c::color, a::Float64, d::Float64, sp::Float64, sh::Float64) = 
         new(c, a, d, sp, sh)
 end
+
+get_color(m::material, p::point, obj::primitive) = get_color(m.color, p, obj)
+get_color(c::color, ::point, ::primitive) = c
+get_color(pat::pattern, p::point, obj::primitive) = pattern_at_object(pat, obj, p)
 
 function ==(m1::material, m2::material)
     return m1.color == m2.color &&

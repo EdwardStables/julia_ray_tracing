@@ -24,6 +24,7 @@ end
 
 *(::identity, A::Matrix) = A
 *(A::Matrix, ::identity) = A
+*(::identity, ::identity) = I
 *(::identity, t::tuple;force_w::Union{Nothing,Int64}=nothing) = t
 
 function determinant(A::Matrix)

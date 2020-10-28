@@ -66,6 +66,7 @@ prepare_computations(i::intersection, r::ray)::computation = computation(i, r)
 function shade_hit(w::world, c::computation)::color
     shadowed = is_shadowed(w, c.over_point)
     return lighting(get_material(c.object),
+                    c.object,
                     w.light,
                     c.point,
                     c.eyev,

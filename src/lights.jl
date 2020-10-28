@@ -47,18 +47,18 @@ function ==(m::light, n::light)
     return m.position == n.position && m.intensity == n.intensity
 end
 
-function lighting(m::T, l::point_light, 
+function lighting(m::T, obj::primitive, l::point_light, 
                   pos::point, eyev::vector, norm::vector,
                  )::color where T <: abstract_material
-    lighting(m,l,pos,eyev,norm,false)
+    lighting(m,obj,l,pos,eyev,norm,false)
 end
-function lighting(m::T, l::point_light, 
+function lighting(m::T, obj::primitive, l::point_light, 
                   pos::point, eyev::vector, norm::vector,
                   in_shadow::Bool
                  )::color where T <: abstract_material
 
     #the color we will see
-    effective_color = m.color * l.intensity
+    effective_color = get_color(m, pos, obj) * l.intensity
     #the ambient aspect
     ambient = effective_color * m.ambient
     in_shadow && return ambient

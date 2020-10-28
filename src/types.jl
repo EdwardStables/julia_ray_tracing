@@ -6,3 +6,4 @@ abstract type abstract_world end
 
 abstract type primitive end
 
+abstract type pattern end
